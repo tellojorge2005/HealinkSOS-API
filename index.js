@@ -3,6 +3,8 @@ const { Pool } = require('pg');
 const cors = require('cors');
 const app = express();
 const port = 3000;
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 app.use(cors());
 app.use(express.json());
@@ -28,15 +30,18 @@ pool.query('SELECT NOW()', (err, res) => {
 app.post('/registrar', async (req, res) => {
   const { nombre, email, edad, sangre, alergias, historial, password } = req.body;
   try {
+    // 1. Encriptamos la contraseña antes de tocar la base de datos
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
     const query = `
       INSERT INTO Usuarios (Nombre_Completo, Email, Edad, Tipo_Sangre, Alergias, Historial_Medico, Hash_Password)
       VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING ID_Usuario`;
     
-    // Siete valores para siete columnas
-    const values = [nombre, email, edad, sangre, alergias, historial, password];
+    // 2. Insertamos el hashedPassword en lugar del password original
+    const values = [nombre, email, edad, sangre, alergias, historial, hashedPassword];
     const result = await pool.query(query, values);
 
-    res.status(201).json({ mensaje: 'Éxito', id: result.rows[0].id_usuario });
+    res.status(201).json({ mensaje: 'Usuario registrado con éxito', id: result.rows[0].id_usuario });
   } catch (err) {
     console.error('Error al insertar:', err.message);
     res.status(500).json({ error: 'Error al registrar' });
@@ -45,15 +50,28 @@ app.post('/registrar', async (req, res) => {
 
 // --- RUTA 2: LOGIN ---
 app.post('/login', async (req, res) => {
-  const { email, password } = req.body; // Recibimos email
+  const { email, password } = req.body; 
   try {
-    // Buscamos por Email en lugar de Nombre_Completo
-    const query = 'SELECT ID_Usuario FROM Usuarios WHERE Email = $1 AND Hash_Password = $2';
-    const result = await pool.query(query, [email, password]);
+    // 1. Primero buscamos al usuario SOLO por su correo
+    const query = 'SELECT ID_Usuario, Hash_Password FROM Usuarios WHERE Email = $1';
+    const result = await pool.query(query, [email]);
 
+    // 2. Verificamos si el correo existe
     if (result.rows.length > 0) {
-      res.json({ id: result.rows[0].id_usuario });
+      const usuario = result.rows[0];
+      
+      // 3. Comparamos la contraseña en texto plano con el hash guardado en la BD
+      const match = await bcrypt.compare(password, usuario.hash_password);
+
+      if (match) {
+        // La contraseña es correcta
+        res.json({ id: usuario.id_usuario, mensaje: "Login exitoso" });
+      } else {
+        // La contraseña es incorrecta
+        res.status(401).json({ error: "Correo o contraseña incorrectos" });
+      }
     } else {
+      // El correo no existe
       res.status(401).json({ error: "Correo o contraseña incorrectos" });
     }
   } catch (err) {
