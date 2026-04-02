@@ -1,0 +1,9 @@
+# Secretos y Configuración
+.env
+shared-wallet/
+node_modules/
+oracle_client/
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
