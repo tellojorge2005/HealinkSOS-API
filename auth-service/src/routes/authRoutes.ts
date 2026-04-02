@@ -1,9 +1,12 @@
 import { Router } from "express";
-import { registrar } from "../controllers/authController";
+import { registrar, login } from "../controllers/authController";
 
 const router = Router();
 
-// Endpoint: POST /auth/registrar
+// Endpoint para creación de cuentas: POST /auth/registrar
 router.post("/registrar", registrar);
+
+// Endpoint para inicio de sesión: POST /auth/login
+router.post("/login", login);
 
 export default router;

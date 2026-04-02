@@ -1,18 +1,18 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToOne } from "typeorm";
 import { UsuarioPerfil } from "./UsuarioPerfil";
 
-@Entity("usuarios_auth")
+@Entity("USUARIOS_AUTH", { schema: "HEALINK_USUARIO" })
 export class UsuarioAuth {
-    @PrimaryGeneratedColumn({ name: "id_usuario" })
+    @PrimaryGeneratedColumn({ name: "ID_USUARIO" })
     id: number;
 
-    @Column({ type: "varchar2", length: 100, unique: true })
+    @Column({ name: "EMAIL", type: "varchar2", length: 100, unique: true })
     email: string;
 
-    @Column({ name: "hash_password", type: "varchar2", length: 255 })
+    @Column({ name: "HASH_PASSWORD", type: "varchar2", length: 255 })
     passwordHash: string;
 
-    @CreateDateColumn({ name: "fecha_registro" })
+    @CreateDateColumn({ name: "FECHA_REGISTRO" })
     fechaRegistro: Date;
 
     // Relación 1 a 1 con el perfil médico

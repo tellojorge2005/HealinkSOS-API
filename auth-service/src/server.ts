@@ -18,14 +18,14 @@ console.log("⏳ Iniciando AppDataSource.initialize()...");
 
 AppDataSource.initialize()
     .then(() => {
-        console.log("✅ ¡CONEXIÓN EXITOSA! Ya estamos dentro de Oracle Cloud. xdxd");
+        console.log("✅ ¡CONEXIÓN EXITOSA! Ya estamos dentro de Oracle Cloud.");
         
         const PORT = process.env.AUTH_PORT || 3001;
         
         // Usamos Number(PORT) y "0.0.0.0" para que sea visible en tu red local
         app.listen(Number(PORT), "0.0.0.0", () => {
-            console.log(`🚀 Microservicio de Auth corriendo en http://localhost:${PORT}`);
-            console.log(`🔗 Probar registro en: http://localhost:${PORT}/auth/registrar`);
+            console.log(`Microservicio de Auth corriendo en http://0.0.0.0:${PORT}`);
+            console.log(`Probar registro en: http://0.0.0.0:${PORT}/auth/registrar`);
         });
     })
     .catch((error: any) => { // <--- Agregamos ': any' para quitar el error TS7006
