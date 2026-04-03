@@ -1,11 +1,10 @@
 import "reflect-metadata";
 import express from "express";
 import cors from "cors";
-import path from "path";
 import { AppDataSource } from "./config/data-source"; // Importamos la conexión
 import authRoutes from "./routes/authRoutes"; // Importamos tus rutas de registro
 
-const app = express(); // <--- Aquí definimos 'app' para que TS ya no llore
+const app = express(); // definimos 'app' para que TS ya no llore
 
 // Middlewares
 app.use(cors());
@@ -14,11 +13,11 @@ app.use(express.json());
 // Montamos las rutas
 app.use("/auth", authRoutes);
 
-console.log("⏳ Iniciando AppDataSource.initialize()...");
+console.log("Iniciando AppDataSource.initialize()...");
 
 AppDataSource.initialize()
     .then(() => {
-        console.log("✅ ¡CONEXIÓN EXITOSA! Ya estamos dentro de Oracle Cloud.");
+        console.log("¡CONEXIÓN EXITOSA! Ya estamos dentro de Oracle Cloud.");
         
         const PORT = process.env.AUTH_PORT || 3001;
         
@@ -29,7 +28,7 @@ AppDataSource.initialize()
         });
     })
     .catch((error: any) => { // <--- Agregamos ': any' para quitar el error TS7006
-        console.log("❌ ERROR EN LA CONEXIÓN:");
+        console.log("ERROR EN LA CONEXIÓN:");
         console.error(error);
     });
 

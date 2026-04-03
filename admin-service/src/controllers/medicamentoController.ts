@@ -48,7 +48,7 @@ export const eliminarMedicamento = async (req: Request, res: Response): Promise<
 
     try {
         const repo = AppDataSource.getRepository(MedicamentoInfo);
-        // CORRECCIÓN: Convertimos el id a número para que TypeScript no chille
+        // Convertimos el id a número para que TypeScript no chille
         await repo.delete(Number(id)); 
         res.status(200).json({ message: "Medicamento eliminado" });
     } catch (error: any) {
