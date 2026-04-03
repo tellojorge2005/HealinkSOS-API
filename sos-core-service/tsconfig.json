@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    /* Ajustes para TypeORM  */
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+
+    /* Configuración de Node.js  */
+    "target": "ESNext",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "outDir": "./dist",
+    "rootDir": "./src",
+
+    /* Estrictos pero útiles */
+    "strict": true,
+    "strictPropertyInitialization": false,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+
+    /* Calidad de Código */
+    "noUncheckedIndexedAccess": true,
+    "sourceMap": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "**/*.spec.ts"]
+}

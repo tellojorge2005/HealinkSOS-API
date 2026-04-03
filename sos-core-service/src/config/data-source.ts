@@ -3,33 +3,27 @@ import { DataSource } from "typeorm";
 import path from "path";
 import dotenv from "dotenv";
 
-// Cargamos el .env desde la raíz
 const rootPath = path.resolve(__dirname, "../../../");
 dotenv.config({ path: path.join(rootPath, ".env") });
 
-// Resolvemos la ruta del Wallet
 const walletPathFromEnv = process.env.DB_WALLET_PATH || "../shared-wallet";
 const walletPath = path.resolve(__dirname, "../../", walletPathFromEnv);
 
-// Le decimos a la red dónde está la carpeta
 process.env.TNS_ADMIN = walletPath;
 
 export const AppDataSource = new DataSource({
     type: "oracle",
-    username: process.env.AUTH_USER, 
-    password: process.env.AUTH_PASS,
-    connectString: process.env.DB_CONNECT_STRING, 
-    
+    username: process.env.SOS_USER, // ¡Tus variables personalizadas!
+    password: process.env.SOS_PASS,
+    connectString: process.env.DB_CONNECT_STRING,
     synchronize: false,
-    logging: true,
+    logging: false, // Lo apago para que no te sature la consola con cada SOS
     entities: [path.join(__dirname, "../entities/**/*.{ts,js}")],
-    
     extra: {
         walletLocation: walletPath,
-        walletPassword: process.env.DB_WALLET_PASSWORD, 
-        
-        connectionTimeout: 120000, 
+        walletPassword: process.env.DB_WALLET_PASSWORD,
+        connectionTimeout: 120000,
         queueTimeout: 120000,
-        thin: true 
+        thin: true
     }
 });

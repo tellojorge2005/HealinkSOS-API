@@ -7,3 +7,5 @@ oracle_client/
 # Archivos de sistema
 .DS_Store
 Thumbs.db
+
+.idea
