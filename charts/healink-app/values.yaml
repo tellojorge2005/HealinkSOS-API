@@ -1,17 +1,17 @@
 replicaCount: 1
 image:
-  pullPolicy: Never # <--- ESTE ES EL CAMBIO MÁGICO
+  pullPolicy: Never
 
 services:
   admin:
     port: 3002
-    image: healink-admin
+    image: docker.io/library/healink-admin
   auth:
     port: 3001
-    image: healink-auth
+    image: docker.io/library/healink-auth
   user:
     port: 3003
-    image: healink-user
+    image: docker.io/library/healink-user
   sos:
     port: 3004
-    image: healink-sos
+    image: docker.io/library/healink-sos
