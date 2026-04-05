@@ -18,17 +18,17 @@ spec:
         - name: {{ $name }}
           image: {{ $config.image }}
           imagePullPolicy: {{ $.Values.image.pullPolicy }}
-          env:                             # <--- AGREGA ESTO
-            - name: TNS_ADMIN              # <--- LA BRÚJULA DE ORACLE
-              value: "/app/shared-wallet"  # <--- RUTA DENTRO DEL CONTENEDOR
-          envFrom:
+          env:                             # Crucial para el Wallet de Oracle
+            - name: TNS_ADMIN
+              value: "/app/shared-wallet"
+          envFrom:                         # Inyecta tu .env desde el Secret
             - secretRef:
                 name: healink-secrets
           ports:
             - containerPort: {{ $config.port }}
           resources:
             limits:
-              memory: "180Mi"
+              memory: "180Mi"              # Ajustado para tu servidor de 1GB
             requests:
               memory: "100Mi"
           volumeMounts:
@@ -38,16 +38,4 @@ spec:
         - name: wallet-volume
           hostPath:
             path: /home/ubuntu/HealinkSOS-API/shared-wallet
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ $name }}-service
-spec:
-  type: ClusterIP
-  selector:
-    app: {{ $name }}
-  ports:
-    - port: {{ $config.port }}
-      targetPort: {{ $config.port }}
 {{- end }}
