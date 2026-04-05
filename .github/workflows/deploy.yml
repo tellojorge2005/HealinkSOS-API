@@ -1,0 +1,38 @@
+name: CI/CD HeaLink SOS Professional
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del código fuente
+        uses: actions/checkout@v4
+
+      - name: Despliegue en Nodo de Producción (Oracle Cloud)
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            # Acceso al directorio del proyecto e integración de cambios
+            cd /home/ubuntu/HealinkSOS-API
+            git pull origin main
+            
+            # Se implementó la construcción local de imágenes para integrar la Wallet
+            sudo docker build -t healink-admin:latest ./admin-service
+            sudo docker build -t healink-auth:latest ./auth-service
+            sudo docker build -t healink-user:latest ./user-service
+            sudo docker build -t healink-sos:latest ./sos-core-service
+
+            # Se realizó la importación de imágenes al entorno de ejecución de K3s
+            sudo docker save healink-admin:latest | sudo k3s ctr images import -
+            sudo docker save healink-auth:latest | sudo k3s ctr images import -
+            sudo docker save healink-user:latest | sudo k3s ctr images import -
+            sudo docker save healink-sos:latest | sudo k3s ctr images import -
+
+            # Se ejecutó el despliegue orquestado mediante Helm
+            helm upgrade --install healink-release ./charts/healink-app

@@ -1,0 +1,6 @@
+apiVersion: v2
+name: healink-app
+description: Se implementó el Chart maestro para la orquestación de HeaLink SOS
+type: application
+version: 1.0.0
+appVersion: "1.0.0"

@@ -1,0 +1,18 @@
+{{- range $name, $config := .Values.services }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $name }}-service
+  labels:
+    app: {{ $name }}
+spec:
+  # Se utiliza ClusterIP para comunicación interna orquestada
+  type: ClusterIP
+  selector:
+    app: {{ $name }}
+  ports:
+    - protocol: TCP
+      port: {{ $config.port }}      # Puerto expuesto en el cluster
+      targetPort: {{ $config.port }} # Puerto real del contenedor Node.js
+  {{- end }}

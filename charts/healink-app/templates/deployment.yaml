@@ -1,0 +1,46 @@
+{{- range $name, $config := .Values.services }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $name }}-service
+spec:
+  replicas: {{ $.Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ $name }}
+  template:
+    metadata:
+      labels:
+        app: {{ $name }}
+    spec:
+      containers:
+        - name: {{ $name }}
+          image: {{ $config.image }}:latest
+          ports:
+            - containerPort: {{ $config.port }}
+          resources:
+            limits:
+              memory: "180Mi"  # Se optimizó el uso de RAM por contenedor
+            requests:
+              memory: "100Mi"
+          volumeMounts:
+            - name: wallet-volume
+              mountPath: /app/shared-wallet
+      volumes:
+        - name: wallet-volume
+          hostPath:
+            path: /home/ubuntu/HealinkSOS-API/shared-wallet # Ruta absoluta en el host
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $name }}-service
+spec:
+  type: ClusterIP
+  selector:
+    app: {{ $name }}
+  ports:
+    - port: {{ $config.port }}
+      targetPort: {{ $config.port }}
+  {{- end }}
