@@ -18,8 +18,11 @@ spec:
         - name: {{ $name }}
           image: {{ $config.image }}
           imagePullPolicy: {{ $.Values.image.pullPolicy }}
-          envFrom:                  # <--- ESTA ES LA LLAVE MAESTRA
-            - secretRef:            # <--- QUE CONECTA EL .ENV
+          env:                             # <--- AGREGA ESTO
+            - name: TNS_ADMIN              # <--- LA BRÚJULA DE ORACLE
+              value: "/app/shared-wallet"  # <--- RUTA DENTRO DEL CONTENEDOR
+          envFrom:
+            - secretRef:
                 name: healink-secrets
           ports:
             - containerPort: {{ $config.port }}
