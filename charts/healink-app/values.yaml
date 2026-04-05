@@ -1,6 +1,6 @@
 replicaCount: 1
 image:
-  pullPolicy: IfNotPresent
+  pullPolicy: Never # <--- ESTE ES EL CAMBIO MÁGICO
 
 services:
   admin:
