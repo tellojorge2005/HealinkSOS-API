@@ -15,4 +15,4 @@ spec:
     - protocol: TCP
       port: {{ $config.port }}      # Puerto expuesto en el cluster
       targetPort: {{ $config.port }} # Puerto real del contenedor Node.js
-  {{- end }}
+{{- end }}

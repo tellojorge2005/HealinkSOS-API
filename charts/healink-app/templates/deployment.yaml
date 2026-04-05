@@ -16,12 +16,13 @@ spec:
     spec:
       containers:
         - name: {{ $name }}
-          image: {{ $config.image }}:latest
+          image: {{ $config.image }}
+          imagePullPolicy: {{ $.Values.image.pullPolicy }}
           ports:
             - containerPort: {{ $config.port }}
           resources:
             limits:
-              memory: "180Mi"  # Se optimizó el uso de RAM por contenedor
+              memory: "180Mi"
             requests:
               memory: "100Mi"
           volumeMounts:
@@ -30,7 +31,7 @@ spec:
       volumes:
         - name: wallet-volume
           hostPath:
-            path: /home/ubuntu/HealinkSOS-API/shared-wallet # Ruta absoluta en el host
+            path: /home/ubuntu/HealinkSOS-API/shared-wallet
 ---
 apiVersion: v1
 kind: Service
@@ -43,4 +44,4 @@ spec:
   ports:
     - port: {{ $config.port }}
       targetPort: {{ $config.port }}
-  {{- end }}
+{{- end }}

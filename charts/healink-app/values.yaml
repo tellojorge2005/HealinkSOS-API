@@ -5,13 +5,13 @@ image:
 services:
   admin:
     port: 3002
-    image: docker.io/library/healink-admin:latest
+    image: "docker.io/library/healink-admin:latest"
   auth:
     port: 3001
-    image: docker.io/library/healink-auth:latest
+    image: "docker.io/library/healink-auth:latest"
   user:
     port: 3003
-    image: docker.io/library/healink-user:latest
+    image: "docker.io/library/healink-user:latest"
   sos:
     port: 3004
-    image: docker.io/library/healink-sos:latest
+    image: "docker.io/library/healink-sos:latest"
