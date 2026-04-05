@@ -17,21 +17,30 @@ jobs:
           host: ${{ secrets.REMOTE_HOST }}
           username: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          # Se aumentó el tiempo de espera a 2 horas para el compilado de TS
+          command_timeout: 120m
+          timeout: 60s
           script: |
             # Acceso al directorio del proyecto e integración de cambios
             cd /home/ubuntu/HealinkSOS-API
             git pull origin main
             
-            # Se implementó la construcción local de imágenes para integrar la Wallet
-            sudo docker build -t healink-admin:latest ./admin-service
-            sudo docker build -t healink-auth:latest ./auth-service
-            sudo docker build -t healink-user:latest ./user-service
-            sudo docker build -t healink-sos:latest ./sos-core-service
-
-            # Se realizó la importación de imágenes al entorno de ejecución de K3s
+            # Se implementó construcción serial con limpieza (prune) para gestionar el 1GB de RAM
+            
+            # 1. Admin Service
+            sudo docker build -t healink-admin:latest ./admin-service && sudo docker system prune -f
             sudo docker save healink-admin:latest | sudo k3s ctr images import -
+
+            # 2. Auth Service
+            sudo docker build -t healink-auth:latest ./auth-service && sudo docker system prune -f
             sudo docker save healink-auth:latest | sudo k3s ctr images import -
+
+            # 3. User Service (Donde tronaba antes)
+            sudo docker build -t healink-user:latest ./user-service && sudo docker system prune -f
             sudo docker save healink-user:latest | sudo k3s ctr images import -
+
+            # 4. SOS Core Service
+            sudo docker build -t healink-sos:latest ./sos-core-service && sudo docker system prune -f
             sudo docker save healink-sos:latest | sudo k3s ctr images import -
 
             # Se ejecutó el despliegue orquestado mediante Helm
