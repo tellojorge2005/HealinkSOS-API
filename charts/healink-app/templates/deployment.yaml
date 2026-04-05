@@ -14,6 +14,10 @@ spec:
       labels:
         app: {{ $name }}
     spec:
+      hostAliases:                         # <--- EL TRUCO DE MAGIA ANTI-DNS
+        - ip: "192.29.105.116"
+          hostnames:
+            - "adb.us-phoenix-1.oraclecloud.com"
       containers:
         - name: {{ $name }}
           image: {{ $config.image }}
