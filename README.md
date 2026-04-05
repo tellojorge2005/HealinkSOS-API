@@ -15,4 +15,4 @@ API central del sistema HeaLink SOS, diseñado para el monitoreo de salud en tie
 * **Comunicaciones:** Twilio API para la gestión de mensajes SMS y llamadas de voz. 
 * **Bases de datos:** Oracle DB para el manejo de información relacional y Oracle NoSQL para el almacenamiento de alta velocidad de telemetría.
 ---
-**Notas Adicional:** Para probar la aplicación y acceder al repositorio principal, favor de ingresar al siguiente enlace: https://github.com/tellojorge2005/Healink-SOS
+**Nota Adicional:** Para probar la aplicación y acceder al repositorio principal, favor de ingresar al siguiente enlace: https://github.com/tellojorge2005/Healink-SOS
