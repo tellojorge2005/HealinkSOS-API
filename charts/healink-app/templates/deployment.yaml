@@ -18,6 +18,9 @@ spec:
         - name: {{ $name }}
           image: {{ $config.image }}
           imagePullPolicy: {{ $.Values.image.pullPolicy }}
+          envFrom:                  # <--- ESTA ES LA LLAVE MAESTRA
+            - secretRef:            # <--- QUE CONECTA EL .ENV
+                name: healink-secrets
           ports:
             - containerPort: {{ $config.port }}
           resources:
